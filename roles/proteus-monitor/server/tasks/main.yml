@@ -1,0 +1,24 @@
+- name: clone proteus-monitor-server
+  git:
+    repo=https://github.com/ameba-proteus/proteus-monitor-server.git
+    dest=/root/local/proteus-monitor-server
+  register: proteus_monitor_server_update
+
+- name: npm install dependencies
+  npm:
+    path=/root/local/proteus-monitor-server
+    executable={{ node_bin }}/npm
+
+- name: daemonize
+  copy:
+    src=proteus-monitor-server.conf
+    dest=/etc/supervisord/conf.d/proteus-monitor-server.conf
+  register: proteus_monitor_server_file_update
+
+- name: update supervisord
+  command: supervisorctl update
+
+- name: update supervisord
+  supervisorctl:
+    name=proteus-monitor-server
+    state=started

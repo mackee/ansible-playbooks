@@ -1,0 +1,25 @@
+- name: clone proteus-monitor-agent
+  git:
+    repo=https://github.com/ameba-proteus/proteus-monitor-agent.git
+    dest=/root/local/proteus-monitor-agent
+  register: proteus_monitor_agent_update
+
+- name: npm install dependencies
+  npm:
+    path=/root/local/proteus-monitor-agent
+    executable={{ node_bin }}/npm
+
+- name: daemonize
+  copy:
+    src=proteus-monitor-agent.conf
+    dest=/etc/supervisord/conf.d/proteus-monitor-agent.conf
+  register: proteus_monitor_agent_file_update
+
+- name: update supervisord
+  command: supervisorctl update
+  when: "proteus_monitor_agent_update.changed or proteus_monitor_agent_file_update.changed"
+
+- name: update supervisord
+  supervisorctl:
+    name=proteus-monitor-agent
+    state=started

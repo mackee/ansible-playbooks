@@ -1,0 +1,15 @@
+- name: make working directory
+  file:
+    path=/root/local
+    state=directory
+
+- name: install development tools
+  yum: name="@Development tools" state=present
+
+- name: git
+  yum: name=git state=latest
+
+- name: install pip
+  yum: name=python-pip
+
+- include: supervisor.yml

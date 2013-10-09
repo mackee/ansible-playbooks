@@ -1,0 +1,5 @@
+- hosts: micro
+  sudo: yes
+  roles:
+    - proteus-monitor/server
+    - proteus-monitor/agent

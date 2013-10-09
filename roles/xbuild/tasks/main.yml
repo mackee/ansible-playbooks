@@ -1,0 +1,5 @@
+- name: clone xbuild
+  git:
+    repo=https://github.com/tagomoris/xbuild.git
+    dest=/root/local/xbuild
+
